@@ -7,9 +7,9 @@ import mongoose from "mongoose";
 import cors from "cors";
 import userRoutes from "./routes/users.routes.js";
 import connnectToScoket from "./controllers/socketManager.js";
-
+import dotenv from 'dotenv';
 const app=express();
-
+dotenv.config();
 const server=createServer(app);
 const io=connnectToScoket(server);
 app.set("port",process.env.PORT || 8000);
@@ -25,10 +25,11 @@ app.use("/api/v1/users",userRoutes);
 
 
 const start=async ()=>{
-    const connectionDb=await mongoose.connect("mongodb+srv://ag199680ag:mongodb1234@cluster0.3vrdu.mongodb.net/");
-    console.log(`Mongo connected db host: ${connectionDb.connection.host}`);
+    const connectionDb=await mongoose.connect(process.env.MONGODB_URL);
+    //console.log(`Mongo connected db host: ${connectionDb.connection.host}`);
+    console.log("DB connected successfully")
     server.listen(app.get("port"),()=>{
-        console.log("LISTING ON PORT 8000");
+        console.log(`LISTING ON PORT ${process.env.PORT}`);
     })
 }
 
